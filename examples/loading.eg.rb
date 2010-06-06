@@ -16,6 +16,8 @@ module PeaceLove
   end
 
   class Collection
+
+
     attr_accessor :mixin
 
     def initialize(collection)
@@ -36,7 +38,7 @@ module PeaceLove
       else
         __extend_cursor(find(*args))
       end
-    def 
+    end
 
     def __extend_cursor(cursor)
     end
@@ -44,6 +46,11 @@ module PeaceLove
     def __extend(hash)
       hash.extend mixin if mixin
       hash
+    end
+
+    (Mongo::Collection.instance_methods - self.instance_methods).each do |name|
+      next if name[-1] == ?=
+      class_eval "def #{name}(*args,&block); @collection.#{name}(*args,&block) end"
     end
   end
 
@@ -92,6 +99,9 @@ module PeaceLove
       def sub_doc(field,mod)
         Doc.mixin(self,field,mod)
       end
+
+      def sub_collection(field,mod)
+      end
     end
   end
 end
@@ -139,9 +149,6 @@ end
 
 eg 'saving object' do
   h = AngryHash[ :somesuch => 'second thing' ]
-
-  @col.insert( h )
-  
-  hh = @col.find_one
-  
+  id = PeaceLove['bears'].insert( h )
+  PeaceLove['bears'].find_one(id)
 end
