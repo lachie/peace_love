@@ -15,6 +15,10 @@ module PeaceLove
     end
   end
 
+  class Cursor
+    # TODO - implement
+  end
+
   class Collection
 
 
@@ -34,13 +38,14 @@ module PeaceLove
 
     def find(*args,&block)
       if block_given?
-        find(*args) {|cursor| yield __extend_cursor(cursor)}
+        find(*args) {|cursor| yield __wrap_cursor(cursor)}
       else
-        __extend_cursor(find(*args))
+        __wrap_cursor(find(*args))
       end
     end
 
-    def __extend_cursor(cursor)
+    def __wrap_cursor(cursor)
+      PeaceLove::Cursor.new(cursor)
     end
 
     def __extend(hash)
