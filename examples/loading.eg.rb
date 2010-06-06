@@ -67,22 +67,22 @@ module PeaceLove
         end
       end
 
-      def extension_registry
-        @extension_registry ||= Hash.new {|h,k| h[k] = []}
+      def object_extensions
+        @object_extensions ||= Hash.new {|h,k| h[k] = []}
       end
       def mark_extension(obj,with)
-        extension_registry[obj.__id__] << with
+        object_extensions[obj.__id__] << with
       end
 
       def mixin_registry
         @mixin_registry ||= Hash.new {|h,k| h[k] = {}}
       end
-      def mixin(target_class,field,mod)
+      def register_mixin(target_class,field,mod)
         mixin_registry[target_class][field.to_s] = mod
       end
 
       def mixin_to(parent_obj,field,obj)
-        extensions = extension_registry[parent_obj.__id__]
+        extensions = object_extensions[parent_obj.__id__]
 
         mixins = mixin_registry.values_at(*extensions)
 
@@ -97,7 +97,7 @@ module PeaceLove
 
     module ClassMethods
       def sub_doc(field,mod)
-        Doc.mixin(self,field,mod)
+        Doc.register_mixin(self,field,mod)
       end
 
       def sub_collection(field,mod)
