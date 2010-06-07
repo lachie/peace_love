@@ -17,6 +17,7 @@ end
 module Bear
   include PeaceLove::Doc
   sub_doc :kind, Kind
+  sub_col :lovers, Bear
 
   def claws; "woah" end
   def liver
@@ -32,7 +33,8 @@ eg 'loading object' do
   yogi = PeaceLove['bears'].find_one(:name => 'yogi')
   Show(yogi.claws)
   Show(yogi.name)
-  Show(yogi.liver)
+
+  Assert(yogi.liver == 'PURE')
   Show(yogi.kind.for_kids?)
 end
 
@@ -56,8 +58,8 @@ eg 'sub collection' do
   yogi = PeaceLove['bears'].find_one(:name => 'yogi')
 
   Show(yogi.lovers)
-  Show(yogi.lovers[0].liver)
-  Show(yogi.lovers[1].liver)
+  Assert(yogi.lovers[0].liver == 'DONATED')
+  Assert(yogi.lovers[1].liver == 'JAUNDICED')
 end
 
 eg 'blank doc' do

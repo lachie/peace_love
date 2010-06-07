@@ -23,22 +23,34 @@ module PeaceLove
       def mixin_registry
         @mixin_registry ||= Hash.new {|h,k| h[k] = {}}
       end
+
       def register_mixin(target_class,field,mod)
-        mixin_registry[target_class][field.to_s] = mod
+        mixin_registry[target_class][field.to_s] = [:single, mod]
+      end
+      def register_mixin_array(target_class, field, mod)
+        mixin_registry[target_class][field.to_s] = [:array, mod]
       end
 
       def mixin_to(parent_obj,field,obj)
         extensions = object_extensions[parent_obj.__id__]
 
-        mixins = mixin_registry.values_at(*extensions)
+        mixins = mixin_registry.values_at(*extensions).map {|m| m[field.to_s]}.compact
+        
+        mixins.each {|(kind,mod)|
+          case kind
+            when :single
+              obj.extend mod
+            when :array
+              # XXX - this is ok for now... we really need to typecheck, perhaps wrap in a smart-array
+              obj.map! {|elt| elt.extend mod}
+            end
+        }
 
-        mixins.map {|m| m[field.to_s]}.flatten.compact.each {|mod| obj.extend mod}
         obj
       end
     end
 
     def [](key)
-      # TODO - wrap sub_collection arrays in a PeaceLove::Array
       Doc.mixin_to(self,key,super)
     end
 
@@ -49,6 +61,7 @@ module PeaceLove
       alias_method :sub_doc, :sub_document
 
       def sub_collection(field,mod)
+        Doc.register_mixin_array(self,field,mod)
       end
       alias_method :sub_col, :sub_collection
     end
