@@ -47,6 +47,19 @@ eg 'wrapping the cursor' do
   }
 end
 
+eg 'sub collection' do
+  $db['bears'].remove()
+  $db['bears'].insert(:name => 'yogi', :liver => 'pure', :kind => {:fictional => true, :cartoon => true}, :lovers => [
+                      {:name => 'mrs. yogi', :liver => 'donated'}, {:name => 'yogi paw', :liver => 'jaundiced'}
+  ])
+
+  yogi = PeaceLove['bears'].find_one(:name => 'yogi')
+
+  Show(yogi.lovers)
+  Show(yogi.lovers[0].liver)
+  Show(yogi.lovers[1].liver)
+end
+
 eg 'blank doc' do
   PeaceLove['bears'].mixin = Bear
   yogi = PeaceLove['bears'].build

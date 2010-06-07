@@ -38,6 +38,7 @@ module PeaceLove
     end
 
     def [](key)
+      # TODO - wrap sub_collection arrays in a PeaceLove::Array
       Doc.mixin_to(self,key,super)
     end
 
