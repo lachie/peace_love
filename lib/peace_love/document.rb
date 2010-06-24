@@ -24,19 +24,27 @@ module PeaceLove
         @mixin_registry ||= Hash.new {|h,k| h[k] = {}}
       end
 
-      def register_mixin(target_class,field,mod)
-        mixin_registry[target_class][field.to_s] = [:single, mod]
+      def register_mixin(target_class,field,mod,options)
+        mixin_registry[target_class][field.to_s] = [:single, mod, options]
       end
-      def register_mixin_array(target_class, field, mod)
-        mixin_registry[target_class][field.to_s] = [:array, mod]
+      def register_mixin_array(target_class, field, mod, options)
+        mixin_registry[target_class][field.to_s] = [:array, mod, options]
       end
 
       def mixin_to(parent_obj,field,obj)
+        # XXX - what does having multiple extensions really mean here?
         extensions = object_extensions[parent_obj.__id__]
 
         mixins = mixin_registry.values_at(*extensions).map {|m| m[field.to_s]}.compact
+
         
-        mixins.each {|(kind,mod)|
+        mixins.each {|(kind,mod,options)|
+          if options.key?(:default) && obj.nil?
+            obj = options[:default]
+          end
+
+          # XXX - what happens when obj is nil
+
           case kind
             when :single
               obj.extend mod
@@ -55,15 +63,21 @@ module PeaceLove
     end
 
     module ClassMethods
-      def sub_document(field,mod)
-        Doc.register_mixin(self,field,mod)
+      def sub_document(field,mod,options={})
+        Doc.register_mixin(self,field,mod,options)
       end
       alias_method :sub_doc, :sub_document
 
-      def sub_collection(field,mod)
-        Doc.register_mixin_array(self,field,mod)
+      def sub_collection(field,mod,options={})
+        Doc.register_mixin_array(self,field,mod,options)
       end
       alias_method :sub_col, :sub_collection
+
+      def build(seed={})
+        doc = AngryHash[ seed ]
+        doc.extend self
+        doc
+      end
     end
   end
 end
