@@ -22,7 +22,8 @@ Gem::Specification.new do |s|
      "lib/peace_love.rb",
      "lib/peace_love/collection.rb",
      "lib/peace_love/cursor.rb",
-     "lib/peace_love/document.rb"
+     "lib/peace_love/document.rb",
+     "peace_love.gemspec"
   ]
   s.homepage = %q{http://github.com/lachie/peace_love}
   s.rdoc_options = ["--charset=UTF-8"]
