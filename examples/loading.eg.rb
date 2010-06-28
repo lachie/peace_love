@@ -25,7 +25,7 @@ module Bear
   end
 end
 
-eg 'loading object' do
+eg 'loading doc' do
   $db['bears'].remove()
   $db['bears'].insert(:name => 'yogi', :liver => 'pure', :kind => {:fictional => true, :cartoon => true})
 
@@ -38,22 +38,36 @@ eg 'loading object' do
   Show(yogi.kind.for_kids?)
 end
 
+eg 'loading a non-existant doc' do
+  $db['bears'].remove()
+  PeaceLove['bears'].mixin = Bear
+  b = PeaceLove['bears'].find_one(:name => 'bertrand')
+  Assert( b.nil? )
+end
+
 eg 'wrapping the cursor' do
   $db['bears'].remove()
   $db['bears'].insert(:name => 'yogi'    , :liver => 'pure', :kind => {:fictional => true, :cartoon => true})
   $db['bears'].insert(:name => 'humphrey', :liver => 'cihrrotic', :kind => {:fictional => true, :cartoon => false})
   
+  i = 0
   PeaceLove['bears'].find.each {|b|
     Show(b)
-    Show(b.liver)
+    if i == 0
+      Assert(b.liver == 'PURE')
+    elsif i == 1
+      Assert(b.liver == 'CIHRROTIC')
+    end
+    i += 1
   }
 end
 
 eg 'sub collection' do
   $db['bears'].remove()
-  $db['bears'].insert(:name => 'yogi', :liver => 'pure', :kind => {:fictional => true, :cartoon => true}, :lovers => [
-                      {:name => 'mrs. yogi', :liver => 'donated'}, {:name => 'yogi paw', :liver => 'jaundiced'}
-  ])
+  $db['bears'].insert(:name => 'yogi', :liver => 'pure', :kind => {:fictional => true, :cartoon => true}, :lovers => 
+                      [
+                        {:name => 'mrs. yogi', :liver => 'donated'}, {:name => 'yogi paw', :liver => 'jaundiced'}
+                      ])
 
   yogi = PeaceLove['bears'].find_one(:name => 'yogi')
 
