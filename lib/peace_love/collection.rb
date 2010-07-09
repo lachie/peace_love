@@ -23,6 +23,8 @@ module PeaceLove
       end
     end
 
+    # TODO find_and_modify
+
     def __wrap_cursor(cursor)
       PeaceLove::Cursor.new(cursor,self)
     end
@@ -36,7 +38,10 @@ module PeaceLove
     end
 
     def __extend(hash)
-      hash.extend mixin if mixin
+      if mixin
+        hash.extend mixin 
+        hash.__source_collection = self if hash.respond_to?(:__source_collection=)
+      end
       hash
     end
 
