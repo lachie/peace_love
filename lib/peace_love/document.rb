@@ -66,6 +66,10 @@ module PeaceLove
       Doc.mixin_to(self,key,super)
     end
 
+    def id
+      self['id']
+    end
+
     def __source_collection=(col)
       @source_collection = col
     end
