@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{peace_love}
-  s.version = "0.0.1"
+  s.version = "0.0.3"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Lachie Cox"]
-  s.date = %q{2010-06-24}
+  s.date = %q{2010-07-14}
   s.description = %q{A simple mixin layer for enhancing hashes retrieved from MongoDB. It eschews the normal 'mapping' compulsion of mongo libraries.}
   s.email = %q{lachie@smartbomb.com.au}
   s.files = [
