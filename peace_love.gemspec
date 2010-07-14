@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{peace_love}
-  s.version = "0.0.3"
+  s.version = "0.0.4"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Lachie Cox"]
@@ -18,7 +18,7 @@ Gem::Specification.new do |s|
      "Rakefile",
      "VERSION",
      "examples/eg.helper.rb",
-     "examples/loading.eg.rb",
+     "examples/usage.eg.rb",
      "lib/peace_love.rb",
      "lib/peace_love/collection.rb",
      "lib/peace_love/cursor.rb",
@@ -32,7 +32,7 @@ Gem::Specification.new do |s|
   s.summary = %q{Peace, Love and Mongo.}
   s.test_files = [
     "examples/eg.helper.rb",
-     "examples/loading.eg.rb"
+     "examples/usage.eg.rb"
   ]
 
   if s.respond_to? :specification_version then
