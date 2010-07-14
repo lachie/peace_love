@@ -2,9 +2,6 @@ require 'eg.helper'
 require 'angry_hash'
 require 'peace_love'
 
-eg.setup do
-  PeaceLove.db = $db
-end
 
 module Kind
   def claws; "dainty" end
@@ -24,6 +21,12 @@ module Bear
     super.upcase
   end
 end
+
+eg.setup do
+  PeaceLove.db = $db
+  PeaceLove['bears'].mixin = nil
+end
+
 
 eg 'loading doc' do
   $db['bears'].remove()
@@ -49,6 +52,8 @@ eg 'wrapping the cursor' do
   $db['bears'].remove()
   $db['bears'].insert(:name => 'yogi'    , :liver => 'pure', :kind => {:fictional => true, :cartoon => true})
   $db['bears'].insert(:name => 'humphrey', :liver => 'cihrrotic', :kind => {:fictional => true, :cartoon => false})
+
+  PeaceLove['bears'].mixin = Bear
   
   i = 0
   PeaceLove['bears'].find.each {|b|
@@ -69,9 +74,9 @@ eg 'sub collection' do
                         {:name => 'mrs. yogi', :liver => 'donated'}, {:name => 'yogi paw', :liver => 'jaundiced'}
                       ])
 
+  PeaceLove['bears'].mixin = Bear
   yogi = PeaceLove['bears'].find_one(:name => 'yogi')
 
-  Show(yogi.lovers)
   Assert(yogi.lovers[0].liver == 'DONATED')
   Assert(yogi.lovers[1].liver == 'JAUNDICED')
 end
@@ -86,4 +91,8 @@ eg 'saving object' do
   h = AngryHash[ :somesuch => 'second thing' ]
   id = PeaceLove['bears'].insert( h )
   PeaceLove['bears'].find_one(id)
+end
+
+eg 'id accessor' do
+  Assert(Bear.build(:id => 'abc').id == 'abc')
 end
