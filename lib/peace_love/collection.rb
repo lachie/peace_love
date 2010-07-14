@@ -33,7 +33,6 @@ module PeaceLove
       return nil unless hash.respond_to?(:to_hash)
 
       hash = __extend( AngryHash[ hash ] )
-      hash.extend mixin if mixin
       hash
     end
 
