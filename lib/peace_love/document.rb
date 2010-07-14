@@ -13,6 +13,7 @@ module PeaceLove
         end
       end
 
+
       def object_extensions
         @object_extensions ||= Hash.new {|h,k| h[k] = []}
       end
@@ -90,6 +91,13 @@ module PeaceLove
     end
 
     module ClassMethods
+      def collection=(collection_name)
+        @collection = PeaceLove[collection_name]
+        @collection.set_mixin(self)
+      end
+
+      def collection; @collection end
+      
       def sub_document(field,mod,options={})
         Doc.register_mixin(self,field,mod,options)
       end

@@ -1,11 +1,18 @@
 module PeaceLove
   class Collection
-    attr_accessor :mixin
     attr_reader :mongo_collection
 
     def initialize(collection)
       @collection = @mongo_collection = collection
     end
+
+    def mixin=(mixin)
+      mixin.collection = @mongo_collection.name
+    end
+    def set_mixin(mixin)
+      @mixin = mixin
+    end
+    attr_reader :mixin
 
     def build(seed={})
       __wrap( seed )
