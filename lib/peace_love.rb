@@ -10,7 +10,7 @@ require 'peace_love/cursor'
 
 module PeaceLove
   class << self
-    attr_accessor :db
+    attr_accessor :db, :connection
 
     def collections
       @collections ||= {}
@@ -18,6 +18,20 @@ module PeaceLove
 
     def [](collection_name)
       collections[collection_name.to_s] ||= PeaceLove::Collection.new( db[collection_name] )
+    end
+
+    def connect(options)
+      options = AngryHash[options]
+
+      if options.port?
+        options.port = options.port.to_i
+      end
+
+      options.delete('adapter') # XXX check?
+
+      # TODO - support paired servers
+      self.connection = Mongo::Connection.new(options.delete('host'), options.delete('port'), options)
+      self.db         = connection.db(options.database)
     end
   end
 end
