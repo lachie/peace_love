@@ -32,8 +32,9 @@ module PeaceLove
       end
 
       def extend_doc(doc,mod,parent_obj)
-        obj.extend mod
-        obj.__parent_doc = parent_obj if obj.respond_to?(:__parent_doc=)
+        doc.extend mod
+        doc.__parent_doc = parent_obj if doc.respond_to?(:__parent_doc=)
+        doc
       end
 
       def mixin_to(parent_obj,field,obj)
@@ -51,9 +52,11 @@ module PeaceLove
 
           case kind
             when :single
-              extend_doc(doc,mod,parent_obj)
+              extend_doc(obj,mod,parent_obj)
             when :array
               # XXX - this is ok for now... we really need to typecheck, perhaps wrap in a smart-array
+
+
               obj.map! {|elt| extend_doc elt, mod, parent_obj}
             end
         }
