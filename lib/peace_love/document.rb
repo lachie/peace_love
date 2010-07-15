@@ -95,8 +95,12 @@ module PeaceLove
         @collection = PeaceLove[collection_name]
         @collection.set_mixin(self)
       end
+      alias mongo_collection collection=
 
-      def collection; @collection end
+      def collection
+        @collection
+      end
+
       
       def sub_document(field,mod,options={})
         Doc.register_mixin(self,field,mod,options)
