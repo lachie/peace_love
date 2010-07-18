@@ -9,6 +9,7 @@ begin
     gemspec.authors = ["Lachie Cox"]
 
     gemspec.add_dependency("mongo", ['~>1.0.0'])
+    gemspec.add_dependency("angry_hash", ['=0.0.5'])
   end
 rescue LoadError
   puts "Jeweler not available. Install it with: gem install jeweler"
