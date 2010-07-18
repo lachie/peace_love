@@ -39,7 +39,7 @@ Now lets insert something:
 
 `PeaceLove['beans']` returns a `PeaceLove::Collection` which thinly wraps a `Mongo::Collection`. See how to use it in the [Mongo Ruby API][monapi]
 
-Notice how we're inserting hashes. PeaceLove is only concerned with hashes coming _out_ of Mongo.
+Notice how we're inserting hashes. PeaceLove only mixes in hashes coming _out_ of Mongo.
 
 Also note that the wrapping of `Mongo::Collection` may not yet be complete.
 
@@ -85,7 +85,7 @@ Here we're using normal Mongo powers to do an atomic push onto `arthur.prefered_
 
 ### Building
 
-To build a hash imbued with module powers, use `#build`:
+To build a hash imbued with module powers, without touching mongo, use `#build`:
 
     arthur = PeaceLove['beans'].build(:name => 'arthur')
     
@@ -138,6 +138,12 @@ Sub collections allow you to mix modules into each element of arrays (and in the
     bean.colours[0].happy? #=> true
     bean.colours[1].name   #=> 'green'
     bean.colours[1].happy? #=> false
+
+### Railtie
+
+There's a simple rails 3 `railtie` for setting up the MongoDB connection using details in `database.yml`.
+
+It will probably become more sophisticated over time.
 
 ## Rationale
 
