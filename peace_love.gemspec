@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{peace_love}
-  s.version = "0.0.5"
+  s.version = "0.1.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Lachie Cox"]
-  s.date = %q{2010-07-14}
+  s.date = %q{2010-07-18}
   s.description = %q{A simple mixin layer for enhancing hashes retrieved from MongoDB. It eschews the normal 'mapping' compulsion of mongo libraries.}
   s.email = %q{lachie@smartbomb.com.au}
   s.files = [
@@ -32,7 +32,10 @@ Gem::Specification.new do |s|
   s.rubygems_version = %q{1.3.6}
   s.summary = %q{Peace, Love and Mongo.}
   s.test_files = [
-    "examples/eg.helper.rb",
+    "examples/collections.eg.rb",
+     "examples/documents.eg.rb",
+     "examples/eg.helper.rb",
+     "examples/readme.eg.rb",
      "examples/usage.eg.rb"
   ]
 
@@ -42,11 +45,14 @@ Gem::Specification.new do |s|
 
     if Gem::Version.new(Gem::RubyGemsVersion) >= Gem::Version.new('1.2.0') then
       s.add_runtime_dependency(%q<mongo>, ["~> 1.0.0"])
+      s.add_runtime_dependency(%q<angry_hash>, ["= 0.0.5"])
     else
       s.add_dependency(%q<mongo>, ["~> 1.0.0"])
+      s.add_dependency(%q<angry_hash>, ["= 0.0.5"])
     end
   else
     s.add_dependency(%q<mongo>, ["~> 1.0.0"])
+    s.add_dependency(%q<angry_hash>, ["= 0.0.5"])
   end
 end
 
