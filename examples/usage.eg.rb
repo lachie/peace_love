@@ -3,118 +3,140 @@ require 'angry_hash'
 require 'peace_love'
 
 
-module Kind
-  def claws; "dainty" end
+## Fixtures
+# Here are a couple of modules we're going to mix into hashes from Mongo.
 
-  def for_kids?
-    fictional? && cartoon?
+module Kind
+  def healthy; "healthy" end
+
+  def kids_love?
+    fictional?
   end
 end
 
-module Bear
+module Bean
   include PeaceLove::Doc
-  sub_doc :kind, Kind
-  sub_col :lovers, Bear
+  sub_doc :kind  , Kind
+  sub_col :examples, Bean
 
-  def claws; "woah" end
-  def liver
-    super.upcase
-  end
+  mongo_collection 'beans'
+
+  def texture; super.upcase end
 end
 
 eg.setup do
   PeaceLove.db = $db
 
-  @mbears = $db['bears']
-  @mbears.remove()
+  @mongo_beans = $db['beans']
+  @mongo_beans.remove()
 
-  Bear.collection = 'bears'
-  @plbears = PeaceLove['bears']
+  @peace_love_beans = PeaceLove['beans']
 end
+
 eg.helpers do
-  attr_reader :mbears, :plbears
+  attr_reader :mongo_beans, :peace_love_beans
 end
 
 
-eg 'loading a document with a mixin' do
-  mbears.insert(:name => 'yogi', :liver => 'pure', :kind => {:fictional => true, :cartoon => true})
+eg 'loading a document' do
+  mongo_beans.insert(:name    => 'lima',
+                     :texture => 'crunchy',
+                     :colours => %w[green white],
+                     :kind => {:grown     => true,
+                               :fictional => false
+                              }
+                    )
 
-  yogi = plbears.find_one(:name => 'yogi')
+  lima = peace_love_beans.find_one(:name => 'lima')
 
-  Assert( yogi.claws      == 'woah' )
-  Assert( yogi.kind.claws == 'dainty' )
-  Assert( yogi.name       == 'yogi' )
+  # attributes on the document
+  Assert( lima.name         == 'lima'          )
+  Assert( lima.colours      == %w[green white] )
 
-  Assert( yogi.liver == 'PURE' )
-  Assert( yogi.kind.for_kids? )
+  # methods on a document
+  Assert( lima.texture      == 'CRUNCHY' )
+
+  # sub-document
+  Assert( lima.kind.grown? )
+
+  # methods on a sub-doc
+  Assert(   lima.kind.healthy == 'healthy' )
+  Assert( ! lima.kind.kids_love? )
+
 end
 
 
-eg 'loading a non-existent doc' do
-  b = plbears.find_one(:name => 'bertrand')
+eg 'loading a non-existent documents' do
+  b = peace_love_beans.find_one(:name => 'delicious')
 
   Assert( b.nil? )
 end
 
 
-eg 'wrapping the mongo cursor' do
-  mbears.insert(:name => 'yogi'    , :liver => 'pure', :kind => {:fictional => true, :cartoon => true})
-  mbears.insert(:name => 'humphrey', :liver => 'cihrrotic', :kind => {:fictional => true, :cartoon => false})
 
-  
+eg 'loading a list of documents' do
+  mongo_beans.insert(:name => 'baked'  , :texture => 'Mushy'  , :kind => {:fictional => false })
+  mongo_beans.insert(:name => 'magical', :texture => 'sparkly', :kind => {:fictional => true  })
+
   i = 0
-  plbears.find.each {|b|
+  peace_love_beans.find.each {|b|
 
     case i
     when 0
-      Assert( b.kind.claws == 'dainty' )
-      Assert( b.liver == 'PURE' )
+      Assert( b.name == 'baked'    )
+      Assert( ! b.kind.kids_love?  )
+      Assert( b.texture == 'MUSHY' )
     when 1
-      Assert( b.kind.claws == 'dainty' )
-      Assert( b.liver == 'CIHRROTIC' )
+      Assert( b.name == 'magical'    )
+      Assert( b.kind.kids_love?      )
+      Assert( b.texture == 'SPARKLY' )
     end
 
     i += 1
   }
 end
 
-
-eg 'mixing in to each element of a sub collection' do
-  mbears.remove()
-  mbears.insert(:name => 'yogi', :liver => 'pure', :kind => {:fictional => true, :cartoon => true}, :lovers => 
-                      [
-                        {:name => 'mrs. yogi', :liver => 'donated'}, {:name => 'yogi paw', :liver => 'jaundiced'}
+eg 'looking into an array sub collection' do
+  mongo_beans.insert(:name => 'jelly', :texture => 'wibbly', :kind => {:fictional => false},
+                     :examples => [
+                       {:name => 'red'  , :texture => 'raspberry'},
+                       {:name => 'black', :texture => 'shunned'  }
                       ])
+                       
 
-  yogi = plbears.find_one(:name => 'yogi')
+  jelly = peace_love_beans.find_one(:name => 'jelly')
 
-  Assert( yogi.lovers[0].liver == 'DONATED'   )
-  Assert( yogi.lovers[1].liver == 'JAUNDICED' )
+  Assert( jelly.examples[0].texture == 'RASPBERRY' )
+  Assert( jelly.examples[1].texture == 'SHUNNED'   )
 end
 
 
-eg 'building a blank doc' do
-  yogi = plbears.build
+eg 'building a blank document' do
+  bean = peace_love_beans.build
 
-  Assert( yogi.claws      == 'woah' )
-  Assert( yogi.kind.claws == 'dainty' )
+  Assert( bean.nothing.nil? )
+  Assert( bean.kind.healthy == 'healthy' )
 end
 
 
 eg 'saving a hash' do
-  h = AngryHash[ :somesuch => 'second thing' ]
-  id = plbears.insert( h )
+  h  = { :some_key => 'some value' }
+  id = peace_love_beans.insert( h )
 
-  Assert( plbears.find_one(id).somesuch == 'second thing' )
+  Assert( peace_love_beans.find_one(id).some_key == 'some value' )
 end
 
 
 eg 'the id accessor works in ruby 1.8 & 1.9' do
-  Assert(Bear.build(:id => 'abc').id == 'abc')
+  Assert( Bean.build(:id => 'abc').id == 'abc' )
 end
 
+__END__
+
+eg 'looking into a hash sub collection' do
+end
 
 # TODO
-#eg 'setting the mixin on the collection' do
-  #PeaceLove['bears'].mixin = Bear
-#end
+eg 'setting the mixin on the collection' do
+  PeaceLove['beans'].mixin = Bear
+end

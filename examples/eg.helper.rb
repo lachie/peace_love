@@ -19,6 +19,7 @@ end
 
 require 'mongo'
 
+# In YAML, output BSON ObjectIds succinctly.
 class BSON::ObjectID
   def to_yaml(opts = {})
     YAML.quick_emit(nil, opts) do |out|
