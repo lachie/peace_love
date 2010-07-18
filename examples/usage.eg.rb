@@ -3,8 +3,13 @@ require 'angry_hash'
 require 'peace_love'
 
 
+
 ## Fixtures
 # Here are a couple of modules we're going to mix into hashes from Mongo.
+
+# Note that `PeaceLove.db` needs to be set before `mongo_collection` is called.
+# This will be fixed in the future.
+PeaceLove.db = $db
 
 module Kind
   def healthy; "healthy" end
@@ -25,7 +30,6 @@ module Bean
 end
 
 eg.setup do
-  PeaceLove.db = $db
 
   @mongo_beans = $db['beans']
   @mongo_beans.remove()
