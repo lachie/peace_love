@@ -18,11 +18,15 @@ module PeaceLove
         @object_extensions ||= {}
       end
 
-      def mark_extension(obj,with)
-        if (previously_with = object_extensions[obj.__id__]) && previously_with != with
-          raise "object #{obj} has already been extended by a different PeaceLove::Doc (was: #{previously_with}, now: #{with})"
+      def mark_extension(doc,mod)
+        # puts "mark_extension doc=#{doc.class} mod=#{mod}"
+        
+        if (previous_mod = object_extensions[doc.__id__]) && previous_mod != mod
+          raise "doc #{doc} has already been extended by a different PeaceLove::Doc (was: #{previous_mod}, now: #{mod})"
         end
-        object_extensions[obj.__id__] = with
+        object_extensions[doc.__id__] = mod
+
+        setup_extended_doc(doc,mod)
       end
 
       def mixin_registry
@@ -37,9 +41,25 @@ module PeaceLove
         mixin_registry[target_class][field.to_s] = [:array, mod, options]
       end
 
+      def register_mixin_hash(target_class, field, mod, options)
+        mixin_registry[target_class][field.to_s] = [:hash, mod, options]
+      end
+
       def extend_doc(doc,mod,parent_obj)
+        # puts "extend_doc doc=#{doc.class} mod=#{mod} parent_obj=#{parent_obj.class}"
+
+        if !parent_obj.nil? && doc.nil?
+          doc = AngryHash.new
+        end
+
         doc.extend mod
-        doc.__parent_doc = parent_obj if doc.respond_to?(:__parent_doc=)
+
+        doc.__parent_doc = parent_doc if doc.respond_to?(:__parent_doc=)
+        doc
+      end
+
+      def setup_extended_doc(doc,mod)
+        mod.fill_in_defaults(doc) if mod.respond_to?(:fill_in_defaults)
         doc
       end
 
@@ -107,6 +127,19 @@ module PeaceLove
 
       def collection
         @collection
+      end
+
+      def defaults(default_form=nil)
+        if default_form
+          @default_form = default_form
+        end
+        @default_form
+      end
+
+      def fill_in_defaults(doc)
+        if defaults
+          doc.reverse_deep_update(defaults)
+        end
       end
       
       def sub_document(field,mod,options={})

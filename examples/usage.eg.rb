@@ -12,6 +12,9 @@ require 'peace_love'
 PeaceLove.db = $db
 
 module Kind
+  include PeaceLove::Doc
+  defaults :a_value => {:defaults => 'values'}
+
   def healthy; "healthy" end
 
   def kids_love?
@@ -23,8 +26,11 @@ module Bean
   include PeaceLove::Doc
   sub_doc :kind  , Kind
   sub_col :examples, Bean
+  sub_hash :examples_hash, Bean
 
   mongo_collection 'beans'
+
+  defaults :ham => {:sandwich => 'golly yes!'}
 
   def texture; super.upcase end
 end
@@ -142,6 +148,27 @@ end
 
 eg 'the id accessor works in ruby 1.8 & 1.9' do
   Assert( Bean.build(:id => 'abc').id == 'abc' )
+end
+
+eg 'setting defaults on the mixin - via build' do
+  bean = Bean.build(:id => 'myd', :ham => {:with_pickles => 'also yes'} )
+
+  Assert( bean.ham.sandwich == 'golly yes!' )
+  Assert( bean.ham.with_pickles == 'also yes' )
+
+  Assert( bean.kind.a_value.defaults == 'values' )
+end
+
+eg 'setting defaults on the mixin - from db' do
+  mongo_beans.insert(:name => 'baked'  , :ham => {'pigglish' => true}, :kind => {:a_value => {:other => 'apples'}})
+
+  bean = peace_love_beans.find_one(:name => 'baked')
+
+  Assert( bean.ham.sandwich == 'golly yes!' )
+  Assert( bean.ham.pigglish ==  true)
+
+  Assert( bean.kind.a_value.defaults == 'values' )
+  Assert( bean.kind.a_value.other    == 'apples' )
 end
 
 __END__

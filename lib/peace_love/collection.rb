@@ -43,12 +43,13 @@ module PeaceLove
       hash
     end
 
-    def __extend(hash)
+    def __extend(doc)
       if mixin
-        hash.extend mixin 
-        hash.__source_collection = self if hash.respond_to?(:__source_collection=)
+        doc.extend mixin 
+        doc.__source_collection = self if doc.respond_to?(:__source_collection=)
       end
-      hash
+
+      doc
     end
 
     (Mongo::Collection.instance_methods - self.instance_methods).each do |name|
