@@ -57,12 +57,15 @@ module PeaceLove
 
           case kind
           when :single
-            extend_doc(obj,mod,parent_obj)
+            obj = extend_doc(obj,mod,parent_obj)
           when :array
             # XXX - this is ok for now... we really need to typecheck, perhaps wrap in a smart-array
-
-
-            obj.map! {|elt| extend_doc elt, mod, parent_obj}
+            obj = obj.map {|elt| extend_doc(elt, mod, parent_obj)}
+          when :hash
+            obj = obj.inject(AngryHash.new) do |h,(k,elt)|
+              h[k] = extend_doc(elt,mod,parent_obj)
+              h
+            end
           end
         end
 
@@ -116,8 +119,13 @@ module PeaceLove
       end
       alias_method :sub_col, :sub_collection
 
+      def sub_hash(field,mod,options={})
+        Doc.register_mixin_hash(self,field,mod,options)
+      end
+
       def build(seed={})
         doc = AngryHash[ seed ]
+        self.fill_in_defaults(doc)
         doc.extend self
         doc
       end

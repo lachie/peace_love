@@ -100,6 +100,15 @@ eg 'loading a list of documents' do
   }
 end
 
+eg 'loading a hash of documents' do
+  mongo_beans.insert(:name => 'baked', :examples_hash => { 'yummy' => {:named => 'yummy', :texture => 'sandy'}, 'yucky' => {:named => 'yiccko'} } )
+
+  baked = peace_love_beans.find_one(:name => 'baked')
+
+  Assert( baked.examples_hash.yummy.named == 'yummy' )
+  Assert( baked.examples_hash.yummy.texture == 'SANDY' )
+end
+
 eg 'looking into an array sub collection' do
   mongo_beans.insert(:name => 'jelly', :texture => 'wibbly', :kind => {:fictional => false},
                      :examples => [
