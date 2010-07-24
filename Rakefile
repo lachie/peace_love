@@ -8,6 +8,8 @@ begin
     gemspec.homepage = "http://github.com/lachie/peace_love"
     gemspec.authors = ["Lachie Cox"]
 
+    gemspec.test_files = []
+
     gemspec.add_dependency("mongo", ['~>1.0.0'])
     gemspec.add_dependency("angry_hash", ['=0.0.5'])
   end

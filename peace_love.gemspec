@@ -5,17 +5,19 @@
 
 Gem::Specification.new do |s|
   s.name = %q{peace_love}
-  s.version = "0.1.0"
+  s.version = "0.1.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Lachie Cox"]
-  s.date = %q{2010-07-18}
+  s.date = %q{2010-07-24}
   s.description = %q{A simple mixin layer for enhancing hashes retrieved from MongoDB. It eschews the normal 'mapping' compulsion of mongo libraries.}
   s.email = %q{lachie@smartbomb.com.au}
   s.files = [
     ".gitignore",
      "Gemfile",
+     "License",
      "Rakefile",
+     "Readme.md",
      "VERSION",
      "examples/eg.helper.rb",
      "examples/usage.eg.rb",
@@ -31,13 +33,6 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
   s.rubygems_version = %q{1.3.6}
   s.summary = %q{Peace, Love and Mongo.}
-  s.test_files = [
-    "examples/collections.eg.rb",
-     "examples/documents.eg.rb",
-     "examples/eg.helper.rb",
-     "examples/readme.eg.rb",
-     "examples/usage.eg.rb"
-  ]
 
   if s.respond_to? :specification_version then
     current_version = Gem::Specification::CURRENT_SPECIFICATION_VERSION
