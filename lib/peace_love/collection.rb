@@ -46,7 +46,7 @@ module PeaceLove
     def __extend(doc)
       if mixin
         doc.extend mixin 
-        doc.__source_collection = self if doc.respond_to?(:__source_collection=)
+        doc.__collection = self if doc.respond_to?(:__collection=)
       end
 
       doc

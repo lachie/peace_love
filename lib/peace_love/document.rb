@@ -101,12 +101,12 @@ module PeaceLove
       self['id']
     end
 
-    def __source_collection=(col)
-      @source_collection = col
+    def __collection=(col)
+      @collection = col
     end
 
-    def __parent_doc(doc)
-      self.__source_collection = doc.__source_collection if doc.respond_to?(:__source_collection)
+    def __parent_doc=(doc)
+      self.__collection = doc.__collection if doc.respond_to?(:__collection)
       @parent_doc = doc
     end
 
@@ -114,8 +114,8 @@ module PeaceLove
       @parent_doc
     end
 
-    def __source_collection
-      @source_collection
+    def __collection
+      @collection
     end
 
     module ClassMethods
