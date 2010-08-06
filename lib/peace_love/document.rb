@@ -80,8 +80,10 @@ module PeaceLove
             obj = extend_doc(obj,mod,parent_obj)
           when :array
             # XXX - this is ok for now... we really need to typecheck, perhaps wrap in a smart-array
+            obj ||= []
             obj = obj.map {|elt| extend_doc(elt, mod, parent_obj)}
           when :hash
+            obj ||= {}
             obj = obj.inject(AngryHash.new) do |h,(k,elt)|
               h[k] = extend_doc(elt,mod,parent_obj)
               h
