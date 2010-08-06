@@ -9,7 +9,11 @@ module Rails #:nodoc:
         config_file = Rails.root + "config/database.yml"
         if config_file.file?
           settings = YAML.load( ERB.new(config_file.read).result )[Rails.env]
-          ::PeaceLove.connect(settings)
+          if settings
+            ::PeaceLove.connect(settings)
+          else
+            raise "Unable to connect to mongo; #{config_file.relative_path_from(Rails.root)} doesn't have an entry for the #{Rails.env} environment."
+          end
         end
       end
 
@@ -24,7 +28,7 @@ You need to set up a #{cfg_file} looking like\n
   host: localhost
 
           EOMSG
-          raise( "Unable to connect to mongodb using #{Rails.root+'config/database.yml'}" )
+          raise( "Unable to connect to mongodb using #{Rails.root+'config/database.yml'} env=#{Rails.env}" )
         end
       end
     end
