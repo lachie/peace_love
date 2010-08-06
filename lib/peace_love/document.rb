@@ -45,10 +45,10 @@ module PeaceLove
         mixin_registry[target_class][field.to_s] = [:hash, mod, options]
       end
 
-      def extend_doc(doc,mod,parent_obj)
+      def extend_doc(doc,mod,parent_doc)
         # puts "extend_doc doc=#{doc.class} mod=#{mod} parent_obj=#{parent_obj.class}"
 
-        if !parent_obj.nil? && doc.nil?
+        if !parent_doc.nil? && doc.nil?
           doc = AngryHash.new
         end
 
