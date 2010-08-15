@@ -7,24 +7,20 @@ module PeaceLove
 
         base.module_eval do
           def self.extend_object(obj)
-            Doc.mark_extension(obj,self)
             super
+            Doc.mark_extension(obj,self)
           end
         end
       end
 
-
-      def object_extensions
-        @object_extensions ||= {}
-      end
-
       def mark_extension(doc,mod)
-        # puts "mark_extension doc=#{doc.class} mod=#{mod}"
+        #puts "mark_extension doc=#{doc.class} mod=#{mod}"
         
-        if (previous_mod = object_extensions[doc.__id__]) && previous_mod != mod
+        # TODO store extension on the doc!
+        if (previous_mod = doc.__peace_love_extension) && previous_mod != mod
           raise "doc #{doc} has already been extended by a different PeaceLove::Doc (was: #{previous_mod}, now: #{mod})"
         end
-        object_extensions[doc.__id__] = mod
+        doc.__peace_love_extension = mod
 
         setup_extended_doc(doc,mod)
       end
@@ -64,7 +60,10 @@ module PeaceLove
       end
 
       def mixin_to(parent_obj,field,obj)
-        extension = object_extensions[parent_obj.__id__]
+        # puts "mixin_to field=#{field}"
+
+        extension = parent_obj.__peace_love_extension
+        # puts "found extension=#{extension.inspect}"
 
         if mixin = mixin_registry[extension][field.to_s]
           kind,mod,options = *mixin
@@ -72,8 +71,6 @@ module PeaceLove
           if options.key?(:default) && obj.nil?
             obj = options[:default]
           end
-
-          # XXX - what happens when obj is nil
 
           case kind
           when :single
@@ -118,6 +115,14 @@ module PeaceLove
 
     def __collection
       @collection
+    end
+
+    def __peace_love_extension=(mod)
+      @__peace_love_extension = mod
+    end
+
+    def __peace_love_extension
+      @__peace_love_extension
     end
 
     module ClassMethods
