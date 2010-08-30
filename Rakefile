@@ -11,7 +11,7 @@ begin
     gemspec.test_files = []
 
     gemspec.add_dependency("mongo", ['~>1.0.0'])
-    gemspec.add_dependency("angry_hash", ['=0.0.5'])
+    gemspec.add_dependency("angry_hash", ['~>0.1.0'])
   end
 rescue LoadError
   puts "Jeweler not available. Install it with: gem install jeweler"

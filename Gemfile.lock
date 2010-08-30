@@ -1,0 +1,18 @@
+GEM
+  remote: http://rubygems.org/
+  specs:
+    angry_hash (0.0.5)
+    bson (1.0.4)
+    bson_ext (1.0.4)
+    exemplor (3000.3.0)
+    mongo (1.0.6)
+      bson (>= 1.0.4)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  angry_hash (= 0.0.5)
+  bson_ext
+  exemplor
+  mongo

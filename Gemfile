@@ -1,6 +1,6 @@
-source :rubygems
+source :rubygems 
 
-gem 'angry_hash', '0.0.5'
+gem 'angry_hash', '~>0.1.1'
 gem 'mongo'
 gem 'bson_ext'
 
