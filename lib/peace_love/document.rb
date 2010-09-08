@@ -78,13 +78,14 @@ module PeaceLove
           when :array
             # XXX - this is ok for now... we really need to typecheck, perhaps wrap in a smart-array
             obj ||= []
-            obj = obj.map {|elt| extend_doc(elt, mod, parent_obj)}
+            puts "mixing in array"
+            obj.map! {|elt| extend_doc(elt, mod, parent_obj)}
           when :hash
             obj ||= {}
-            obj = obj.inject(AngryHash.new) do |h,(k,elt)|
+            obj.replace( obj.inject(AngryHash.new) do |h,(k,elt)|
               h[k] = extend_doc(elt,mod,parent_obj)
               h
-            end
+            end )
           end
         end
 
