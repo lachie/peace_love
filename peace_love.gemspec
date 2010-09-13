@@ -9,12 +9,13 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Lachie Cox"]
-  s.date = %q{2010-08-23}
+  s.date = %q{2010-09-10}
   s.description = %q{A simple mixin layer for enhancing hashes retrieved from MongoDB. It eschews the normal 'mapping' compulsion of mongo libraries.}
   s.email = %q{lachie@smartbomb.com.au}
   s.files = [
     ".gitignore",
      "Gemfile",
+     "Gemfile.lock",
      "License",
      "Rakefile",
      "Readme.md",
@@ -39,15 +40,15 @@ Gem::Specification.new do |s|
     s.specification_version = 3
 
     if Gem::Version.new(Gem::RubyGemsVersion) >= Gem::Version.new('1.2.0') then
-      s.add_runtime_dependency(%q<mongo>, ["~> 1.0.0"])
-      s.add_runtime_dependency(%q<angry_hash>, ["~> 0.1.0"])
+      s.add_runtime_dependency(%q<mongo>, ["~> 1.0.8"])
+      s.add_runtime_dependency(%q<angry_hash>, ["~> 0.2.2"])
     else
-      s.add_dependency(%q<mongo>, ["~> 1.0.0"])
-      s.add_dependency(%q<angry_hash>, ["~> 0.1.0"])
+      s.add_dependency(%q<mongo>, ["~> 1.0.8"])
+      s.add_dependency(%q<angry_hash>, ["~> 0.2.2"])
     end
   else
-    s.add_dependency(%q<mongo>, ["~> 1.0.0"])
-    s.add_dependency(%q<angry_hash>, ["~> 0.1.0"])
+    s.add_dependency(%q<mongo>, ["~> 1.0.8"])
+    s.add_dependency(%q<angry_hash>, ["~> 0.2.2"])
   end
 end
 

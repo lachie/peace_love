@@ -38,9 +38,7 @@ module PeaceLove
 
     def __wrap(hash)
       return nil unless hash.respond_to?(:to_hash)
-
-      hash = __extend( AngryHash[ hash ] )
-      hash
+      __extend( AngryHash[ hash ] )
     end
 
     def __extend(doc)
