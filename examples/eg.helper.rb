@@ -6,7 +6,8 @@ require 'exemplor'
 require 'pp'
 
 require 'pathname'
-here = Pathname(__FILE__).dirname
+
+here = Pathname('..').expand_path(__FILE__)
 $LOAD_PATH << here << (here+'../lib')
 
 class Object
