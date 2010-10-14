@@ -4,20 +4,41 @@ require 'angry_hash'
 module PeaceLove
 end
 
-require 'peace_love/document'
-require 'peace_love/collection'
-require 'peace_love/cursor'
+require 'peace_love/class_ext'
 
 module PeaceLove
-  class << self
-    attr_accessor :db, :connection
+  autoload :Db, 'peace_love/db'
+  autoload :Doc, 'peace_love/document'
+  autoload :Collection, 'peace_love/collection'
+  autoload :Cursor, 'peace_love/cursor'
 
-    def collections
-      @collections ||= {}
+  class << self
+    attr_accessor :default_db, :mongo
+
+    def dbs
+      @dbs ||= {}
     end
 
-    def [](collection_name)
-      collections[collection_name.to_s] ||= PeaceLove::Collection.new( db[collection_name] )
+    def [](*db_name)
+      if db_name = db_name.flatten.compact.pop
+        dbs[db_name.to_s] ||= PeaceLove::Db.new( mongo[db_name], mixin_config[db_name] )
+      else
+        @wrapped_default_db ||= PeaceLove::Db.new( default_db, mixin_config[nil] )
+      end
+    end
+
+    def mixin_config
+      @mixin_config ||= Hash.new {|h,k| h[k] = {}}
+    end
+
+    def collection_for_mixin(mixin)
+      mixin_config.each do |db,db_mixins|
+        db_mixins.each do |col,col_mixin|
+          if col_mixin == mixin
+            return self[db][col]
+          end
+        end
+      end
     end
 
     def connect(options)
@@ -29,9 +50,8 @@ module PeaceLove
 
       options.delete('adapter') # XXX check?
 
-      # TODO - support paired servers
       self.connection = Mongo::Connection.new(options.delete('host'), options.delete('port'), options)
-      self.db         = connection.db(options.database)
+      self.default_db = connection.db(options.database)
     end
   end
 end

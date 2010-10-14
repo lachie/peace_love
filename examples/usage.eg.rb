@@ -9,7 +9,8 @@ require 'peace_love'
 
 # Note that `PeaceLove.db` needs to be set before `mongo_collection` is called.
 # This will be fixed in the future.
-PeaceLove.db = $db
+PeaceLove.mongo = $mongo
+PeaceLove.default_db = $db
 
 module Kind
   include PeaceLove::Doc
@@ -28,7 +29,7 @@ module Bean
   sub_col :examples, Bean
   sub_hash :examples_hash, Bean
 
-  mongo_collection 'beans'
+  mongo :collection => 'beans'
 
   defaults :ham => {:sandwich => 'golly yes!'}
 
@@ -40,7 +41,7 @@ eg.setup do
   @mongo_beans = $db['beans']
   @mongo_beans.remove()
 
-  @peace_love_beans = PeaceLove['beans']
+  @peace_love_beans = PeaceLove[]['beans']
 end
 
 eg.helpers do

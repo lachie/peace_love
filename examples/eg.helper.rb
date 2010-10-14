@@ -29,4 +29,5 @@ class BSON::ObjectID
   end
 end
 
-$db = Mongo::Connection.new.db('sample-db')
+$mongo = Mongo::Connection.new
+$db    = $mongo.db('sample-db')
