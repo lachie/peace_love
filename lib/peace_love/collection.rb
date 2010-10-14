@@ -1,18 +1,11 @@
 module PeaceLove
   class Collection
-    attr_reader :mongo_collection
+    attr_reader :mongo_collection, :mixin
 
-    def initialize(collection)
+    def initialize(collection, mixin)
       @collection = @mongo_collection = collection
-    end
-
-    def mixin=(mixin)
-      mixin.collection = @mongo_collection.name
-    end
-    def set_mixin(mixin)
       @mixin = mixin
     end
-    attr_reader :mixin
 
     def build(seed={})
       __wrap( seed )
@@ -55,5 +48,4 @@ module PeaceLove
       class_eval "def #{name}(*args,&block); @collection.#{name}(*args,&block) end" unless method_defined?(name)
     end
   end
-
 end

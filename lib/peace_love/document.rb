@@ -11,13 +11,9 @@ module PeaceLove
       @collection = col
     end
 
-    def __parent_doc=(doc)
+    def __parent_hash=(doc)
       self.__collection = doc.__collection if doc.respond_to?(:__collection)
-      @parent_doc = doc
-    end
-
-    def __parent_doc
-      @parent_doc
+      super
     end
 
     def __collection
@@ -25,14 +21,15 @@ module PeaceLove
     end
 
     module ClassMethods
-      def collection=(collection_name)
-        @collection = PeaceLove[collection_name]
-        @collection.set_mixin(self)
+      def mongo(options)
+        PeaceLove.mixin_config[options[:db]][options[:collection]] = self
       end
-      alias mongo_collection collection=
+      def mongo_collection(collection_name)
+        PeaceLove.mixin_config[nil][collection_name] = self
+      end
 
       def collection
-        @collection
+        @collection ||= PeaceLove.collection_for_mixin(self)
       end
 
       include AngryHash::Extension::ClassMethods
