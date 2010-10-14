@@ -2,11 +2,6 @@ require 'mongo'
 require 'angry_hash'
 
 module PeaceLove
-end
-
-require 'peace_love/class_ext'
-
-module PeaceLove
   autoload :Db, 'peace_love/db'
   autoload :Doc, 'peace_love/document'
   autoload :Collection, 'peace_love/collection'
