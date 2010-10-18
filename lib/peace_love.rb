@@ -8,7 +8,7 @@ module PeaceLove
   autoload :Cursor, 'peace_love/cursor'
 
   class << self
-    attr_accessor :default_db, :mongo
+    attr_accessor :default_db, :mongo, :connection
 
     def dbs
       @dbs ||= {}
