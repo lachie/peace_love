@@ -1,8 +1,7 @@
 source :rubygems 
 
-gem 'angry_hash', '~>0.2.0'
-gem 'mongo'
-gem 'bson_ext'
+gemspec
+gem 'bson', '~> 1.1.5'
 
 group :test do
   gem 'exemplor'
