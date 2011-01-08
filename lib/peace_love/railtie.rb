@@ -18,7 +18,7 @@ module Rails #:nodoc:
       end
 
       initializer "check connection" do
-        unless ::PeaceLove.db.present?
+        unless ::PeaceLove.default_db.present?
           cfg_file = Rails.root.join('config/database.yml')
           cfg_file.exist? or raise(<<-EOMSG)
 Unable to connect to mongodb: #{cfg_file} doesn't exist.
