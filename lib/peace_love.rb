@@ -6,6 +6,7 @@ module PeaceLove
   autoload :Doc, 'peace_love/document'
   autoload :Collection, 'peace_love/collection'
   autoload :Cursor, 'peace_love/cursor'
+  autoload :OidHelper, 'peace_love/oid_helper'
 
   class << self
     attr_accessor :default_db, :mongo, :connection

@@ -4,8 +4,11 @@ module PeaceLove
   module Doc
     def self.included(base)
       base.send :include, AngryHash::Extension
+      base.send :include, OidHelper
       base.extend ClassMethods
+      base.extend OidHelper
     end
+
 
     def __collection=(col)
       @collection = col
