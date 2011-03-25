@@ -1,6 +1,6 @@
 source :rubygems 
 
-gemspec
+# gemspec
 gem 'bson_ext', '~> 1.2.0'
 
 group :test do
