@@ -10,7 +10,7 @@ begin
 
     gemspec.test_files = []
 
-    gemspec.add_dependency("mongo", ['~>1.1.5'])
+    gemspec.add_dependency("mongo", ['~>1.2.0'])
     gemspec.add_dependency("angry_hash", ['~>0.3.2'])
   end
 rescue LoadError
