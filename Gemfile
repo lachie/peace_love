@@ -1,7 +1,7 @@
 source :rubygems 
 
 gemspec
-gem 'bson', '~> 1.1.5'
+gem 'bson_ext', '~> 1.2.0'
 
 group :test do
   gem 'exemplor'
